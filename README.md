@@ -45,14 +45,12 @@ Team **kabhinav24** · Happiest Health Digital Twin Challenge · Reimagining and
 ## 1. Team details
 
 **Team name:** kabhinav24
-**Repository folder name:** `kabhinav24_[College Name]`
+**Repository folder name:** `kabhinav24_IITKanpur`
 
 | # | Name | Role in the project | College / Incubator | Programme & year | Email |
 |---|---|---|---|---|---|
-| 1 | [Name] — **Team leader** | [Role] | [College, City] | [Programme, Year] | [email] |
-| 2 | [Name] | [Role] | [College, City] | [Programme, Year] | [email] |
-| 3 | [Name] | [Role] | [College, City] | [Programme, Year] | [email] |
-| 4 | [Name] | [Role] | [College, City] | [Programme, Year] | [email] |
+| 1 | [Abhinav Kumar] — **Team leader** | [Student] | [IIT Kanpur, Kanpur] | [Mechanical, 3rd Year] | 
+
 
 **College / incubator information:** [College name(s), city] · [Incubator name, if any]
 **Point of contact:** [Team leader name], [email]
