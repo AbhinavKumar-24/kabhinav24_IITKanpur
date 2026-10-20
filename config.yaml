@@ -1,0 +1,154 @@
+# GlucoTwin configuration.
+# Every threshold here is fixed before evaluation (APPROACH.md §0 and §5.3). Change values only
+# before a run, never in response to outer-fold results.
+
+seed: 42
+
+paths:
+  raw_cgmacros: data/raw/cgmacros        # scripts/download_cgmacros.sh puts the dataset here
+  synthetic_dir: data/synthetic          # committed synthetic-track inputs
+  processed: data/processed              # aligned tables per track (git-ignored)
+  reports: reports                       # evidence reports at the root, synthetic in reports/synthetic
+  models: models                         # models/evidence is git-ignored; models/synthetic is committed
+
+sensors:
+  dexcom_interval_min: 5
+  libre_interval_min: 15
+  primary: dexcom
+  primary_min_coverage: 0.70             # share of expected primary readings over the wear period
+  glucose_low_limit: 40                  # sensor floor: a reading of 40 means "<= 40"
+  glucose_high_limit: 400                # sensor ceiling: a reading of 400 means ">= 400"
+  max_imputation_gap_min: 20
+
+cgmacros:
+  expected_group_counts: {healthy: 15, prediabetes: 16, t2d: 14}
+  hba1c_thresholds_pct: [5.7, 6.4]
+  lab_error_codes: {ldl: 800, vldl: 400}
+  mets_scale: 10
+  mets_plausible: [0.5, 25.0]
+  meal_order_min_fraction: 0.8
+  meal_dedup_window_min: 60
+  interpolation_tolerance_mgdl: 0.6
+
+event:
+  threshold_mgdl: 180
+  persistence_min: 15
+  max_gap_min: 20
+  merge_min: 30
+
+eligibility:
+  history_min: 60
+  history_min_coverage: 0.70
+  recent_high_window_min: 30
+
+evaluability:
+  horizon_min: 120
+  min_coverage: 0.80
+  confirm_extra_min: 15
+
+alerts:
+  budget_per_day: 3
+  cooldown_min: 90
+  recent_window_min: 30
+  recent_min_coverage: 0.50
+  early_lead_min: 30
+
+features:
+  cap_min: 360
+  meal_decay_min: 90
+  met_rest_level: 1.5
+
+sleep:
+  window_start_hour: 20
+  window_end_hour: 11
+  min_coverage: 0.70
+  max_interruption_min: 10
+  reference_hours: 7
+
+twin:
+  sigma_mgdl: 20
+  meal_memory_min: 1440                  # meals older than this no longer contribute
+  activity_window_min: 60                # E2: post-meal activity counted for this long
+  default_tau_r_min: 60
+  tau_r_grid_min: [10, 20, 30, 45, 60, 90, 120, 180]
+  band_quantiles: [0.10, 0.90]
+  band_horizons_min: [15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180]
+  forecast_horizons_min: [30, 60]
+  extensions: [E1, E2, E3]
+  personalisation_hours: [0, 6, 24, 72]
+  evaluation_from_hour: 72
+  forecast_eval_step_min: 15
+  identifiability_bootstraps: 10
+  max_nfev: 60
+
+lightgbm:
+  n_estimators: 300
+  learning_rate: 0.05
+  num_leaves: 15
+  min_child_samples: 100
+  colsample_bytree: 0.8
+  subsample: 0.8
+  subsample_freq: 1
+  class_weight: balanced
+  random_state: 42
+  n_jobs: 2
+  verbose: -1
+
+cv:
+  outer_folds: 5
+  inner_folds: 4
+  bootstrap: 1000
+
+whatif:
+  walk_mets: 3.5
+  min_logged_meals: 5
+  horizon_min: 180
+
+dashboard:
+  panel_size: 25
+
+synthetic:
+  reference_date: "2026-10-01"           # the Synthea -r date; ages are computed at this date
+  n_patients: 200
+  mix: {t2d: 80, prediabetes: 80, healthy: 40}
+  days: 14
+  eval_patients: 60                      # demo evaluation subset (synthetic results are never evidence)
+  # Approximate adult age mix used to re-weight Synthea patients toward an Indian population.
+  # Set by us as a rough target; replace with Census/NFHS figures if precise weights matter.
+  age_mix: {"25-34": 0.28, "35-44": 0.27, "45-54": 0.22, "55-64": 0.15, "65-75": 0.08}
+  tcf7l2_risk_allele_freq: 0.30          # simulated genetic marker (set by us, synthetic profile only)
+  activity_cadence_min: 5
+  # Simulation truth for the synthetic track (chosen by us, not learned from any data)
+  simulation:
+    kc_base: 0.45
+    kc_per_hba1c: 0.35
+    kc_noise_sd: 0.20
+    tau_base_min: 40
+    tau_per_hba1c: 7
+    beta: 0.004
+    ka: 0.008
+    ks: 0.06
+    ar_sd_mgdl: 8
+    ar_phi_5min: 0.97
+    sensor_sd_mgdl: 4
+    dropout_prob_per_day: 0.3
+  smoke: {n_patients: 12, days: 4, eval_patients: 12, outer_folds: 3, inner_folds: 2, bootstrap: 200}
+  # Indian meal library: per-serving macros are approximate standard-recipe estimates chosen by us.
+  # Check them against the Indian Food Composition Tables 2017 (Longvah et al., ICMR-NIN) before use.
+  meal_library:
+    - {name: poha, slot: breakfast, carbs: 40, protein: 5, fat: 8, fiber: 2, kcal: 250}
+    - {name: upma, slot: breakfast, carbs: 40, protein: 6, fat: 9, fiber: 3, kcal: 260}
+    - {name: idli-sambar, slot: breakfast, carbs: 55, protein: 10, fat: 4, fiber: 5, kcal: 300}
+    - {name: dosa with chutney and sambar, slot: breakfast, carbs: 50, protein: 8, fat: 12, fiber: 4, kcal: 340}
+    - {name: aloo paratha with curd, slot: breakfast, carbs: 70, protein: 12, fat: 20, fiber: 5, kcal: 520}
+    - {name: rice-dal-sabzi, slot: lunch, carbs: 90, protein: 16, fat: 12, fiber: 8, kcal: 540}
+    - {name: rajma-chawal, slot: lunch, carbs: 85, protein: 18, fat: 10, fiber: 10, kcal: 500}
+    - {name: roti-dal-sabzi, slot: lunch, carbs: 70, protein: 16, fat: 12, fiber: 10, kcal: 460}
+    - {name: curd rice, slot: lunch, carbs: 60, protein: 9, fat: 8, fiber: 2, kcal: 350}
+    - {name: roti-sabzi-dal, slot: dinner, carbs: 65, protein: 15, fat: 12, fiber: 9, kcal: 440}
+    - {name: khichdi, slot: dinner, carbs: 60, protein: 12, fat: 8, fiber: 5, kcal: 360}
+    - {name: biryani, slot: dinner, carbs: 80, protein: 22, fat: 22, fiber: 4, kcal: 610}
+    - {name: chai with sugar and biscuits, slot: snack, carbs: 25, protein: 3, fat: 5, fiber: 0.5, kcal: 160}
+    - {name: samosa with chai, slot: snack, carbs: 35, protein: 5, fat: 17, fiber: 2, kcal: 320}
+    - {name: fruit, slot: snack, carbs: 25, protein: 1, fat: 0.3, fiber: 3, kcal: 105}
+    - {name: roasted chana, slot: snack, carbs: 18, protein: 6, fat: 2, fiber: 5, kcal: 120}

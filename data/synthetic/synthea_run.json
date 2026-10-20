@@ -1,0 +1,24 @@
+{
+  "bundles_read": 1116,
+  "alive_patients": 976,
+  "eligible_age_25_75": 975,
+  "eligible_by_group": {
+    "healthy": 454,
+    "prediabetes": 432,
+    "t2d": 89
+  },
+  "selected_by_group": {
+    "t2d": 80,
+    "prediabetes": 80,
+    "healthy": 40
+  },
+  "shortfall_by_group": {},
+  "hba1c_simulated": 60,
+  "fasting_glucose_simulated": 36,
+  "synthea_version": "v3.4.0",
+  "population": 1000,
+  "seed": 42,
+  "reference_date": "20261001",
+  "command": "bash scripts/generate_synthea.sh",
+  "note": "Synthetic records only. HbA1c and fasting glucose missing from Synthea, and all fasting insulin and genetic-marker values, are simulated (see prov_* columns)."
+}

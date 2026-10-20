@@ -1,0 +1,14 @@
+# Pinned versions, tested on Python 3.11 and 3.13. Install with:
+#   pip install -r requirements.txt && pip install -e . --no-deps
+numpy==2.2.6
+pandas==2.2.3
+scipy==1.15.3
+scikit-learn==1.6.1
+lightgbm==4.6.0
+pyarrow==19.0.1
+pyyaml==6.0.2
+plotly==5.24.1
+streamlit==1.45.1
+# development and CI
+pytest==8.3.5
+ruff==0.11.13
