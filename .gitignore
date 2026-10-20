@@ -1,0 +1,29 @@
+# Real data and anything derived from it never enters Git (CGMacros is CC BY-NC-SA 4.0; APPROACH.md §12)
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+models/evidence/
+data/synthetic/synthea_raw/
+
+# CI and local run outputs
+ci-smoke/
+ci-full-demo/
+test-results/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+
+# Editors and OS
+.DS_Store
+.idea/
+.vscode/
+.streamlit/secrets.toml
