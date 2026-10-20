@@ -52,8 +52,8 @@ Team **kabhinav24** · Happiest Health Digital Twin Challenge · Reimagining and
 | 1 | [Abhinav Kumar] — **Team leader** | [Student] | [IIT Kanpur, Kanpur] | [Mechanical, 3rd Year] | 
 
 
-**College / incubator information:** [College name(s), city] · [Incubator name, if any]
-**Point of contact:** [Team leader name], [email]
+**College / incubator information:** [IIT Kanpur, Kanpur] · [SIIC IIT Kanpur]
+**Point of contact:** [Abhinav Kumar], [Abhinavkr2121@gmail.com]
 
 ---
 
